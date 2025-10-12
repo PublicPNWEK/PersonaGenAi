@@ -1,0 +1,5 @@
+{
+  "name": "persona",
+  "description": "An AI-powered tool to generate and simulate the creation of social media profiles. It uses Gemini to create unique bios, usernames, and profile pictures, then simulates the account creation process across multiple platforms.",
+  "requestFramePermissions": []
+}
