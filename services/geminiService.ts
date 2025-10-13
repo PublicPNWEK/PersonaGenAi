@@ -1,5 +1,3 @@
-
-
 // Fix: Implement Gemini API call to generate social media profiles.
 import { GoogleGenAI, GenerateContentResponse, Type } from "@google/genai";
 import { UserInput, ProfileSuggestions } from '../types';
@@ -19,6 +17,7 @@ export const generateProfiles = async (data: UserInput): Promise<ProfileSuggesti
     - **Desired Vibe/Tone:** ${data.vibe}
     - **Target Audience:** ${data.audience}
     ${data.affiliateLink ? `- **Promotional Link to include in bio (if appropriate):** ${data.affiliateLink}` : ''}
+    ${data.detailedPrompt ? `- **Special Instructions:** ${data.detailedPrompt}` : ''}
 
     **Target Platforms:** ${platformNames}
 

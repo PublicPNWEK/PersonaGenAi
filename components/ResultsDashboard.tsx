@@ -1,6 +1,7 @@
 
+
 import React from 'react';
-import { ProfileSuggestions } from '../types';
+import { ProfileSuggestions, Plan } from '../types';
 import { PLATFORMS } from '../constants';
 import { CopyableField } from './CopyableField';
 import { ComplianceDashboard } from './ComplianceDashboard';
@@ -15,10 +16,11 @@ import { PremiumTeaser } from './PremiumTeaser';
 interface Props {
   suggestions: ProfileSuggestions;
   onStartOver: () => void;
-  isAdmin: boolean;
+  currentPlan: Plan;
+  onUpgradeClick: () => void;
 }
 
-export const ResultsDashboard: React.FC<Props> = ({ suggestions, onStartOver, isAdmin }) => {
+export const ResultsDashboard: React.FC<Props> = ({ suggestions, onStartOver, currentPlan, onUpgradeClick }) => {
   return (
     <div className="max-w-4xl mx-auto animate-fade-in space-y-12">
       <div className="text-center">
@@ -60,14 +62,14 @@ export const ResultsDashboard: React.FC<Props> = ({ suggestions, onStartOver, is
         <ComplianceDashboard />
         <MarketIntelligenceReport />
         <ApiPayloadViewer />
-        {isAdmin ? (
+        {currentPlan === 'PRO' ? (
           <>
             <AdminDashboard />
             <EnterpriseDashboard />
             <DeployDashboard />
           </>
         ) : (
-          <PremiumTeaser />
+          <PremiumTeaser onUpgradeClick={onUpgradeClick} />
         )}
       </section>
       

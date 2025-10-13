@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ClipboardIcon, CheckCircleIcon } from './icons/FeatureIcons';
 
@@ -9,11 +10,22 @@ interface Props {
 
 export const CopyableField: React.FC<Props> = ({ label, value, type = 'text' }) => {
   const [copied, setCopied] = useState(false);
+  const [copyError, setCopyError] = useState<string | null>(null);
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(value);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopy = async () => {
+    // Reset states on each click
+    setCopied(false);
+    setCopyError(null);
+
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000); // Success message lasts 2s
+    } catch (err) {
+      console.error("Clipboard API failed:", err);
+      setCopyError("Copy failed. Check browser permissions.");
+      setTimeout(() => setCopyError(null), 3000); // Error message lasts 3s
+    }
   };
 
   const baseClasses = "w-full bg-slate-700/50 border border-slate-600 rounded-md p-3 pr-12 text-white text-sm";
@@ -49,6 +61,11 @@ export const CopyableField: React.FC<Props> = ({ label, value, type = 'text' }) 
           )}
         </button>
       </div>
+      {copyError && (
+        <p className="text-xs text-red-400 mt-1 animate-fade-in">
+          {copyError}
+        </p>
+      )}
     </div>
   );
 };

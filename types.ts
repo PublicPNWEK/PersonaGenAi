@@ -9,6 +9,8 @@ export type Platform =
   | 'youtube'
   | 'reddit';
 
+export type Plan = 'FREE' | 'PRO';
+
 export interface UserInput {
   name: string;
   bioDescription: string;
@@ -18,6 +20,7 @@ export interface UserInput {
   affiliateLink?: string;
   email?: string;
   phone?: string;
+  detailedPrompt?: string;
 }
 
 export interface ProfileSuggestion {

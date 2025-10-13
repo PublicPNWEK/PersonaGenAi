@@ -3,6 +3,7 @@ import React from 'react';
 import { ProfileSuggestions } from '../types';
 import { PLATFORMS } from '../constants';
 import { LoadingSpinner } from './icons/LoadingSpinner';
+import { CopyableField } from './CopyableField';
 
 interface Props {
   suggestions: ProfileSuggestions;
@@ -29,14 +30,8 @@ export const SuggestionsReview: React.FC<Props> = ({ suggestions, onRegenerate, 
                 <h3 className="text-xl font-bold text-white">{platformInfo.name}</h3>
               </div>
               <div className="space-y-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-400 mb-1">Username</label>
-                  <p className="bg-slate-700/50 p-3 rounded-md text-white font-mono text-sm">{profile.username}</p>
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-400 mb-1">Bio</label>
-                  <p className="bg-slate-700/50 p-3 rounded-md text-white text-sm whitespace-pre-wrap">{profile.bio}</p>
-                </div>
+                <CopyableField label="Username" value={profile.username} />
+                <CopyableField label="Bio" value={profile.bio} type="textarea" />
               </div>
             </div>
           );

@@ -6,12 +6,13 @@ import { PostingProgress } from './components/PostingProgress';
 import { ResultsDashboard } from './components/ResultsDashboard';
 import { ErrorDisplay } from './components/ErrorDisplay';
 import { ConnectAccounts } from './components/ConnectAccounts';
-import { UserInput, ProfileSuggestions, Platform } from './types';
+import { UserInput, ProfileSuggestions, Platform, Plan } from './types';
 import { generateProfiles } from './services/geminiService';
 import { Footer } from './components/Footer';
 import { PrivacyModal } from './components/modals/PrivacyModal';
 import { TermsModal } from './components/modals/TermsModal';
 import { ContactModal } from './components/modals/ContactModal';
+import { UpgradeModal } from './components/modals/UpgradeModal';
 
 
 type AppState = 'INITIAL' | 'GENERATING' | 'REVIEWING' | 'CONNECTING' | 'POSTING' | 'RESULTS';
@@ -23,8 +24,8 @@ const App: React.FC = () => {
   const [connectedPlatforms, setConnectedPlatforms] = useState<Platform[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isRegenerating, setIsRegenerating] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [modal, setModal] = useState<'privacy' | 'terms' | 'contact' | null>(null);
+  const [currentPlan, setCurrentPlan] = useState<Plan>('FREE');
+  const [modal, setModal] = useState<'privacy' | 'terms' | 'contact' | 'upgrade' | null>(null);
 
   const handleFormSubmit = async (data: UserInput) => {
     setUserInput(data);
@@ -73,19 +74,30 @@ const App: React.FC = () => {
     setSuggestions(null);
     setConnectedPlatforms([]);
     setError(null);
-    // Keep admin state on reset
+    // Keep plan state on reset
   };
   
   const handleToggleAdmin = () => {
-    setIsAdmin(true);
-    console.log("Admin mode enabled!");
+    // This now acts as a developer tool to toggle PRO plan for testing
+    setCurrentPlan('PRO');
+    console.log("Pro plan enabled for testing!");
+  };
+
+  const handleUpgrade = () => {
+    setCurrentPlan('PRO');
+    setModal(null); // Close modal after upgrade
   };
 
 
   const renderContent = () => {
     // Show UserInputForm for both INITIAL and GENERATING states to utilize the form's loading state.
     if (appState === 'INITIAL' || appState === 'GENERATING') {
-      return <UserInputForm onSubmit={handleFormSubmit} isGenerating={appState === 'GENERATING'} />;
+      return <UserInputForm 
+                onSubmit={handleFormSubmit} 
+                isGenerating={appState === 'GENERATING'} 
+                currentPlan={currentPlan}
+                onUpgradeClick={() => setModal('upgrade')}
+             />;
     }
 
     switch (appState) {
@@ -96,10 +108,10 @@ const App: React.FC = () => {
       case 'POSTING':
         return suggestions && <PostingProgress suggestions={suggestions} connectedPlatforms={connectedPlatforms} onComplete={() => setAppState('RESULTS')} />;
       case 'RESULTS':
-        return suggestions && <ResultsDashboard suggestions={suggestions} onStartOver={handleReset} isAdmin={isAdmin} />;
+        return suggestions && <ResultsDashboard suggestions={suggestions} onStartOver={handleReset} currentPlan={currentPlan} onUpgradeClick={() => setModal('upgrade')}/>;
       default:
         // This case should be unreachable due to the check above, but provides a safe fallback.
-        return <UserInputForm onSubmit={handleFormSubmit} isGenerating={false} />;
+        return <UserInputForm onSubmit={handleFormSubmit} isGenerating={false} currentPlan={currentPlan} onUpgradeClick={() => setModal('upgrade')} />;
     }
   };
 
@@ -111,19 +123,20 @@ const App: React.FC = () => {
       <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-pink-500/30 rounded-full filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
 
       <div className="relative z-10 flex flex-col min-h-screen">
-        <Header />
+        <Header currentPlan={currentPlan} onUpgradeClick={() => setModal('upgrade')} />
         <main className="container mx-auto px-4 py-8 flex-grow">
           <div className="max-w-3xl mx-auto">
             {error && <ErrorDisplay message={error} onClear={() => setError(null)} />}
           </div>
           {renderContent()}
         </main>
-        <Footer onOpenModal={setModal} onToggleAdmin={handleToggleAdmin} />
+        <Footer onOpenModal={(modalName) => setModal(modalName)} onToggleAdmin={handleToggleAdmin} />
       </div>
       
       <PrivacyModal isOpen={modal === 'privacy'} onClose={() => setModal(null)} />
       <TermsModal isOpen={modal === 'terms'} onClose={() => setModal(null)} />
       <ContactModal isOpen={modal === 'contact'} onClose={() => setModal(null)} />
+      <UpgradeModal isOpen={modal === 'upgrade'} onClose={() => setModal(null)} onUpgrade={handleUpgrade} />
 
       {/* FIX: Removed invalid `jsx` and `global` props from the <style> tag, which are specific to Next.js and not supported in this React environment. */}
       <style>{`
