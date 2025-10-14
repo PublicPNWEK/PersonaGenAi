@@ -1,9 +1,6 @@
     <div align="center">
     src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-
 </div>
-
-
 AI Studio: https://ai.studio/apps/drive/1-8Gh0dorHEQEwZO88PwTDvhZJfsI4b-7
 
 ## Run Locally
