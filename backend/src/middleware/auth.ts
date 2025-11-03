@@ -52,5 +52,5 @@ export const generateToken = (userId: string, expiresIn: string = '7d'): string 
     throw new Error('JWT_SECRET is not configured');
   }
 
-  return jwt.sign({ userId }, jwtSecret, { expiresIn });
+  return jwt.sign({ userId }, jwtSecret, { expiresIn } as jwt.SignOptions);
 };

@@ -1,6 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { GoogleIntegrationService } from '../services/googleIntegration.js';
-import { logger } from '../utils/logger.js';
 
 const router = Router();
 const googleService = new GoogleIntegrationService();

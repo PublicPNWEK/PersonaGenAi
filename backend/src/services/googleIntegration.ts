@@ -17,7 +17,7 @@ export class GoogleIntegrationService {
   /**
    * Generate content using Gemini AI
    */
-  async generateContent(prompt: string, options?: {
+  async generateContent(prompt: string, _options?: {
     temperature?: number;
     maxTokens?: number;
   }): Promise<string> {
