@@ -110,13 +110,22 @@ export const handleOAuthCallback = async (
   // This is a SIMULATION for development/demo purposes only
   console.warn('Using simulated OAuth callback. Replace with server-side implementation in production.');
   
+  // Generate secure random IDs
+  const userId = typeof window !== 'undefined' && window.crypto 
+    ? `user_${window.crypto.getRandomValues(new Uint32Array(1))[0].toString(36)}`
+    : `user_${Date.now().toString(36)}`;
+  
+  const username = typeof window !== 'undefined' && window.crypto
+    ? `@user_${window.crypto.getRandomValues(new Uint32Array(1))[0].toString(36)}`
+    : `@user_${Date.now().toString(36)}`;
+  
   const credentials: SocialMediaCredentials = {
     platform,
     accessToken: `simulated_token_${code}`,
     refreshToken: `simulated_refresh_${code}`,
     expiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour from now
-    userId: `user_${Math.random().toString(36).substring(7)}`,
-    username: `@user_${Math.random().toString(36).substring(7)}`,
+    userId,
+    username,
   };
   
   storeSocialCredentials(credentials);

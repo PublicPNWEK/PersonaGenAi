@@ -1,4 +1,7 @@
 // API Key Management Service for Monetization
+// SECURITY NOTE: This is a client-side implementation for demonstration purposes.
+// In production, API key generation and validation should be handled server-side,
+// and keys should be stored securely in a database with proper encryption.
 import { ApiKeyConfig, ApiTier, UsageMetrics } from '../types/backend';
 import { storageService } from './storageService';
 import { getTierLimits } from './backendConfig';
