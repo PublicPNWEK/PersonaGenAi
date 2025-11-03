@@ -88,11 +88,19 @@ export class GoogleIntegrationService {
         emailData.body
       ].join('\n');
 
-      const encodedMessage = Buffer.from(message)
-        .toString('base64')
+      // Base64 encode and make URL-safe
+      // Note: The trailing equals signs are padding and safe to remove for URL-safe base64
+      const base64 = Buffer.from(message).toString('base64');
+      const urlSafeBase64 = base64
         .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=+$/, '');
+        .replace(/\//g, '_');
+      
+      // Remove trailing padding (max 2 equals signs in base64)
+      const encodedMessage = urlSafeBase64.endsWith('==') 
+        ? urlSafeBase64.slice(0, -2)
+        : urlSafeBase64.endsWith('=')
+        ? urlSafeBase64.slice(0, -1)
+        : urlSafeBase64;
 
       const response = await axios.post(
         'https://www.googleapis.com/gmail/v1/users/me/messages/send',

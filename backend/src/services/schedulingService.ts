@@ -115,8 +115,23 @@ export class SchedulingService {
     try {
       const postId = `recurring-${Date.now()}`;
       
+      // Create a recurring post entry
+      const recurringPost: ScheduledPost = {
+        ...post,
+        id: postId,
+        scheduledTime: new Date() // Next execution time will be determined by cron
+      };
+      
+      this.posts.set(postId, recurringPost);
+      
       const task = cron.schedule(cronExpression, async () => {
         await this.executeScheduledPost(postId);
+        // Update the scheduled time for next execution
+        if (this.posts.has(postId)) {
+          const currentPost = this.posts.get(postId)!;
+          currentPost.scheduledTime = new Date();
+          this.posts.set(postId, currentPost);
+        }
       });
 
       this.scheduledJobs.set(postId, task);
