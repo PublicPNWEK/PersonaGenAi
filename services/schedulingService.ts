@@ -127,11 +127,18 @@ export const processDueScheduledPosts = async (): Promise<void> => {
 };
 
 // Initialize scheduler (should be called when app starts)
+let schedulerIntervalId: NodeJS.Timeout | null = null;
+
 export const initializeScheduler = (): void => {
+  // Clear existing interval if any to prevent multiple intervals
+  if (schedulerIntervalId) {
+    clearInterval(schedulerIntervalId);
+  }
+  
   // Check for due posts every minute
   const checkInterval = 60 * 1000; // 60 seconds
   
-  setInterval(() => {
+  schedulerIntervalId = setInterval(() => {
     processDueScheduledPosts().catch(error => {
       console.error('Error processing scheduled posts:', error);
     });
@@ -141,6 +148,14 @@ export const initializeScheduler = (): void => {
   processDueScheduledPosts().catch(error => {
     console.error('Error processing scheduled posts on init:', error);
   });
+};
+
+// Stop the scheduler (useful for cleanup)
+export const stopScheduler = (): void => {
+  if (schedulerIntervalId) {
+    clearInterval(schedulerIntervalId);
+    schedulerIntervalId = null;
+  }
 };
 
 // Get scheduled posts summary

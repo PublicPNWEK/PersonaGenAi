@@ -44,6 +44,7 @@ export {
   deleteScheduledPost,
   processDueScheduledPosts,
   initializeScheduler,
+  stopScheduler,
   getScheduledPostsSummary,
   batchSchedulePosts,
 } from './schedulingService';
