@@ -36,12 +36,13 @@ export const TimeZoneClock: React.FC<TimeZoneClockProps> = ({ timezone, is24Hour
   useEffect(() => {
     if (!timeData) return;
 
+    const startTime = performance.now();
+    const initialFetchTime = new Date(timeData.datetime).getTime();
+
     const interval = setInterval(() => {
-      // Calculate elapsed time since last API fetch
-      const now = new Date();
-      const lastFetch = new Date(timeData.datetime);
-      const elapsed = now.getTime() - lastFetch.getTime();
-      const updatedTime = new Date(lastFetch.getTime() + elapsed);
+      // Use performance.now() for precise elapsed time measurement
+      const elapsedMs = performance.now() - startTime;
+      const updatedTime = new Date(initialFetchTime + elapsedMs);
       setCurrentTime(formatTime(updatedTime.toISOString(), is24Hour));
     }, 1000);
 

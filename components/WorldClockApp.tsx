@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TimeZoneSelector } from './TimeZoneSelector';
 import { TimeZoneClock } from './TimeZoneClock';
 import { fetchTimeZones, TimeZone } from '../services/worldTimeService';
+import './WorldClockApp.css';
 
 export const WorldClockApp: React.FC = () => {
   const [availableZones, setAvailableZones] = useState<TimeZone[]>([]);
@@ -168,19 +169,6 @@ export const WorldClockApp: React.FC = () => {
           </p>
         </footer>
       </div>
-
-      <style>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 0.5; }
-        }
-        .animate-pulse {
-          animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-      `}</style>
     </div>
   );
 };

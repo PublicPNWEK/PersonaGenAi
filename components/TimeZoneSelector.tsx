@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { TimeZone } from '../services/worldTimeService';
 
+const MAX_DISPLAYED_RESULTS = 10;
+
 interface TimeZoneSelectorProps {
   availableZones: TimeZone[];
   selectedZones: string[];
@@ -23,7 +25,7 @@ export const TimeZoneSelector: React.FC<TimeZoneSelectorProps> = ({
   const filteredZones = availableZones.filter(zone =>
     !selectedZones.includes(zone.value) &&
     zone.label.toLowerCase().includes(searchTerm.toLowerCase())
-  ).slice(0, 10); // Limit to 10 results for performance
+  ).slice(0, MAX_DISPLAYED_RESULTS); // Limit results for performance
 
   // Close dropdown when clicking outside
   useEffect(() => {

@@ -83,7 +83,7 @@ function getBrowserTimeForZone(timezone: string): TimeZoneInfo {
   });
 
   const parts = formatter.formatToParts(now);
-  const partsObj: any = {};
+  const partsObj: Record<string, string> = {};
   parts.forEach(part => {
     partsObj[part.type] = part.value;
   });
@@ -92,14 +92,17 @@ function getBrowserTimeForZone(timezone: string): TimeZoneInfo {
   const datetime = `${partsObj.year}-${partsObj.month}-${partsObj.day}T${partsObj.hour}:${partsObj.minute}:${partsObj.second}`;
   const utcOffset = partsObj.timeZoneName || '+00:00';
 
+  // Create a date in the target timezone
+  const tzDate = new Date(now.toLocaleString('en-US', { timeZone: timezone }));
+  
   return {
     timezone,
-    datetime: new Date(now.toLocaleString('en-US', { timeZone: timezone })).toISOString(),
+    datetime: tzDate.toISOString(),
     utc_datetime: now.toISOString(),
     utc_offset: utcOffset,
-    day_of_week: now.getDay(),
-    day_of_year: Math.floor((now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / 86400000),
-    week_number: Math.ceil((now.getTime() - new Date(now.getFullYear(), 0, 1).getTime()) / (7 * 86400000))
+    day_of_week: tzDate.getDay(),
+    day_of_year: Math.floor((tzDate.getTime() - new Date(tzDate.getFullYear(), 0, 0).getTime()) / 86400000),
+    week_number: Math.ceil((tzDate.getTime() - new Date(tzDate.getFullYear(), 0, 1).getTime()) / (7 * 86400000))
   };
 }
 
