@@ -30,3 +30,6 @@ export interface ProfileSuggestion {
 }
 
 export type ProfileSuggestions = ProfileSuggestion[];
+
+// Re-export backend types for convenience
+export * from './types/backend';
