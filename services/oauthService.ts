@@ -2,6 +2,7 @@
 import { SocialMediaCredentials } from '../types/backend';
 import { storageService } from './storageService';
 import { backendConfig } from './backendConfig';
+import { isInstagramConfig, isTwitterConfig, isTikTokConfig } from './typeGuards';
 
 const CREDENTIALS_STORAGE_KEY = 'personagen_social_credentials';
 
@@ -47,19 +48,6 @@ export const areCredentialsValid = (platform: string): boolean => {
   }
   
   return true;
-};
-
-// Type guards for social media API configurations
-const isInstagramConfig = (config: any): config is { clientId: string; clientSecret: string; redirectUri: string } => {
-  return config && 'clientId' in config && 'clientSecret' in config && 'redirectUri' in config;
-};
-
-const isTwitterConfig = (config: any): config is { apiKey: string; apiSecret: string; bearerToken: string } => {
-  return config && 'apiKey' in config && 'apiSecret' in config && 'bearerToken' in config;
-};
-
-const isTikTokConfig = (config: any): config is { clientKey: string; clientSecret: string } => {
-  return config && 'clientKey' in config && 'clientSecret' in config;
 };
 
 // Initialize OAuth flow for a platform

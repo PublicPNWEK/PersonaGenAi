@@ -1,5 +1,6 @@
 // Backend configuration service for multi-platform integration
 import { BackendConfig, ApiTier } from '../types/backend';
+import { isInstagramConfig, isTwitterConfig, isTikTokConfig } from './typeGuards';
 
 // Default backend configuration
 // In production, these values should be loaded from environment variables
@@ -80,19 +81,6 @@ export const getTierLimits = (tier: ApiTier) => {
 // Helper function to check if a service is enabled
 export const isGoogleServiceEnabled = (service: 'calendar' | 'drive' | 'analytics'): boolean => {
   return backendConfig.googleServices[service]?.enabled || false;
-};
-
-// Type guards for social media API configurations
-const isInstagramConfig = (config: any): config is { clientId: string; clientSecret: string; redirectUri: string } => {
-  return config && 'clientId' in config && 'clientSecret' in config && 'redirectUri' in config;
-};
-
-const isTwitterConfig = (config: any): config is { apiKey: string; apiSecret: string; bearerToken: string } => {
-  return config && 'apiKey' in config && 'apiSecret' in config && 'bearerToken' in config;
-};
-
-const isTikTokConfig = (config: any): config is { clientKey: string; clientSecret: string } => {
-  return config && 'clientKey' in config && 'clientSecret' in config;
 };
 
 // Helper function to validate API credentials
