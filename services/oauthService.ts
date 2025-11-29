@@ -60,20 +60,26 @@ export const initiateOAuth = async (platform: 'instagram' | 'twitter' | 'tiktok'
   let authUrl = '';
   
   switch (platform) {
-    case 'instagram':
+    case 'instagram': {
       // Instagram Basic Display API OAuth URL
-      authUrl = `https://api.instagram.com/oauth/authorize?client_id=${config.clientId}&redirect_uri=${config.redirectUri}&scope=user_profile,user_media&response_type=code`;
+      const instagramConfig = config as { clientId: string; clientSecret: string; redirectUri: string; };
+      authUrl = `https://api.instagram.com/oauth/authorize?client_id=${instagramConfig.clientId}&redirect_uri=${instagramConfig.redirectUri}&scope=user_profile,user_media&response_type=code`;
       break;
+    }
       
-    case 'twitter':
+    case 'twitter': {
       // Twitter OAuth 2.0 URL (requires PKCE in production)
-      authUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${config.apiKey}&redirect_uri=${window.location.origin}/auth/twitter/callback&scope=tweet.read%20tweet.write%20users.read&state=${generateState()}`;
+      const twitterConfig = config as { apiKey: string; apiSecret: string; bearerToken: string; };
+      authUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${twitterConfig.apiKey}&redirect_uri=${window.location.origin}/auth/twitter/callback&scope=tweet.read%20tweet.write%20users.read&state=${generateState()}`;
       break;
+    }
       
-    case 'tiktok':
+    case 'tiktok': {
       // TikTok OAuth URL
-      authUrl = `https://www.tiktok.com/auth/authorize/?client_key=${config.clientKey}&response_type=code&scope=user.info.basic,video.list&redirect_uri=${window.location.origin}/auth/tiktok/callback&state=${generateState()}`;
+      const tiktokConfig = config as { clientKey: string; clientSecret: string; };
+      authUrl = `https://www.tiktok.com/auth/authorize/?client_key=${tiktokConfig.clientKey}&response_type=code&scope=user.info.basic,video.list&redirect_uri=${window.location.origin}/auth/tiktok/callback&state=${generateState()}`;
       break;
+    }
       
     default:
       throw new Error(`Unsupported platform: ${platform}`);
