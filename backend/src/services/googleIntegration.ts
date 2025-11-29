@@ -95,12 +95,8 @@ export class GoogleIntegrationService {
         .replace(/\+/g, '-')
         .replace(/\//g, '_');
       
-      // Remove trailing padding (max 2 equals signs in base64)
-      const encodedMessage = urlSafeBase64.endsWith('==') 
-        ? urlSafeBase64.slice(0, -2)
-        : urlSafeBase64.endsWith('=')
-        ? urlSafeBase64.slice(0, -1)
-        : urlSafeBase64;
+      // Remove all trailing padding for URL-safe base64
+      const encodedMessage = urlSafeBase64.replace(/=+$/, '');
 
       const response = await axios.post(
         'https://www.googleapis.com/gmail/v1/users/me/messages/send',
