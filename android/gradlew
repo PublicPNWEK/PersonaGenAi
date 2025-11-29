@@ -1,0 +1,27 @@
+#!/usr/bin/env sh
+
+# Placeholder Gradle wrapper script. The real wrapper JAR is not
+# committed to keep the repository lightweight. Run `gradle wrapper`
+# once on your machine to generate the full wrapper, then re-run this
+# script.
+
+DIR="$(cd "$(dirname "$0")" && pwd)"
+
+WRAPPER_JAR="$DIR/gradle/wrapper/gradle-wrapper.jar"
+
+if [ ! -f "$WRAPPER_JAR" ]; then
+	echo "gradle-wrapper.jar missing. Run 'gradle wrapper' inside the android/ directory." >&2
+	exit 1
+fi
+
+JAVA_EXEC="${JAVA_HOME:-}/bin/java"
+if [ ! -x "$JAVA_EXEC" ]; then
+	JAVA_EXEC="$(command -v java)"
+fi
+
+if [ -z "$JAVA_EXEC" ]; then
+	echo "Unable to locate java executable. Ensure JDK 17+ is installed." >&2
+	exit 1
+fi
+
+exec "$JAVA_EXEC" -jar "$WRAPPER_JAR" "$@"
