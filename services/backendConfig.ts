@@ -82,24 +82,31 @@ export const isGoogleServiceEnabled = (service: 'calendar' | 'drive' | 'analytic
   return backendConfig.googleServices[service]?.enabled || false;
 };
 
+// Type guards for social media API configurations
+const isInstagramConfig = (config: any): config is { clientId: string; clientSecret: string; redirectUri: string } => {
+  return config && 'clientId' in config && 'clientSecret' in config && 'redirectUri' in config;
+};
+
+const isTwitterConfig = (config: any): config is { apiKey: string; apiSecret: string; bearerToken: string } => {
+  return config && 'apiKey' in config && 'apiSecret' in config && 'bearerToken' in config;
+};
+
+const isTikTokConfig = (config: any): config is { clientKey: string; clientSecret: string } => {
+  return config && 'clientKey' in config && 'clientSecret' in config;
+};
+
 // Helper function to validate API credentials
 export const validateApiCredentials = (platform: 'instagram' | 'twitter' | 'tiktok'): boolean => {
   const config = backendConfig.socialMediaApis[platform];
   if (!config) return false;
   
   switch (platform) {
-    case 'instagram': {
-      const instagramConfig = config as { clientId: string; clientSecret: string; redirectUri: string; };
-      return !!(instagramConfig.clientId && instagramConfig.clientSecret);
-    }
-    case 'twitter': {
-      const twitterConfig = config as { apiKey: string; apiSecret: string; bearerToken: string; };
-      return !!(twitterConfig.apiKey && twitterConfig.apiSecret);
-    }
-    case 'tiktok': {
-      const tiktokConfig = config as { clientKey: string; clientSecret: string; };
-      return !!(tiktokConfig.clientKey && tiktokConfig.clientSecret);
-    }
+    case 'instagram':
+      return isInstagramConfig(config) && !!(config.clientId && config.clientSecret);
+    case 'twitter':
+      return isTwitterConfig(config) && !!(config.apiKey && config.apiSecret);
+    case 'tiktok':
+      return isTikTokConfig(config) && !!(config.clientKey && config.clientSecret);
     default:
       return false;
   }
