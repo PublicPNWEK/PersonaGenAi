@@ -13,7 +13,9 @@ export interface ApiCredentials {
 export interface UsageMetrics {
   totalRequests: number;
   requestsThisMonth: number;
+  requestsToday: number;
   lastRequestDate: Date;
+  lastDailyReset: Date;
   platforms: Record<string, number>;
 }
 

@@ -10,7 +10,7 @@ export const backendConfig: BackendConfig = {
     instagram: {
       clientId: process.env.INSTAGRAM_CLIENT_ID || '',
       clientSecret: process.env.INSTAGRAM_CLIENT_SECRET || '',
-      redirectUri: process.env.INSTAGRAM_REDIRECT_URI || `${window.location.origin}/auth/instagram/callback`,
+      redirectUri: process.env.INSTAGRAM_REDIRECT_URI || (typeof window !== 'undefined' ? `${window.location.origin}/auth/instagram/callback` : ''),
     },
     twitter: {
       apiKey: process.env.TWITTER_API_KEY || '',

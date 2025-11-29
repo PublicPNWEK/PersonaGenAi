@@ -1,4 +1,7 @@
 // API Key Management Service for Monetization
+// SECURITY NOTE: This is a client-side implementation for demonstration purposes.
+// In production, API key generation and validation should be handled server-side,
+// and keys should be stored securely in a database with proper encryption.
 import { ApiKeyConfig, ApiTier, UsageMetrics } from '../types/backend';
 import { storageService } from './storageService';
 import { getTierLimits } from './backendConfig';
@@ -17,7 +20,9 @@ export const generateApiKey = (tier: ApiTier): string => {
 const createDefaultUsage = (): UsageMetrics => ({
   totalRequests: 0,
   requestsThisMonth: 0,
+  requestsToday: 0,
   lastRequestDate: new Date(),
+  lastDailyReset: new Date(),
   platforms: {},
 });
 
@@ -60,16 +65,23 @@ export const trackApiUsage = (platform: string): boolean => {
   const config = getApiKeyConfig();
   const now = new Date();
   const currentMonth = now.getMonth();
+  const currentDay = now.getDate();
   const lastRequestMonth = new Date(config.usage.lastRequestDate).getMonth();
+  const lastDailyResetDay = new Date(config.usage.lastDailyReset || now).getDate();
   
   // Reset monthly counter if it's a new month
   if (currentMonth !== lastRequestMonth) {
     config.usage.requestsThisMonth = 0;
   }
   
+  // Reset daily counter if it's a new day
+  if (currentDay !== lastDailyResetDay) {
+    config.usage.requestsToday = 0;
+    config.usage.lastDailyReset = now;
+  }
+  
   // Check daily limit
-  const requestsToday = config.usage.requestsThisMonth; // Simplified - should track daily separately
-  if (config.limits.requestsPerDay !== -1 && requestsToday >= config.limits.requestsPerDay) {
+  if (config.limits.requestsPerDay !== -1 && config.usage.requestsToday >= config.limits.requestsPerDay) {
     return false; // Daily limit exceeded
   }
   
@@ -81,6 +93,7 @@ export const trackApiUsage = (platform: string): boolean => {
   // Update usage
   config.usage.totalRequests++;
   config.usage.requestsThisMonth++;
+  config.usage.requestsToday++;
   config.usage.lastRequestDate = now;
   config.usage.platforms[platform] = (config.usage.platforms[platform] || 0) + 1;
   

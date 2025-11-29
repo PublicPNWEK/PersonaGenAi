@@ -101,24 +101,45 @@ export const handleOAuthCallback = async (
   platform: string,
   code: string
 ): Promise<SocialMediaCredentials> => {
-  // In a real implementation, this would exchange the code for tokens via the backend
-  // For now, we'll simulate the response
+  // SECURITY NOTE: In a production environment, this function should:
+  // 1. Send the authorization code to your backend server
+  // 2. Backend exchanges code for access token with the platform's API
+  // 3. Backend securely stores tokens and returns a session token to the client
+  // 4. Never expose real access tokens to the client-side code
+  
+  // This is a SIMULATION for development/demo purposes only
+  console.warn('Using simulated OAuth callback. Replace with server-side implementation in production.');
+  
+  // Generate secure random IDs
+  const userId = typeof window !== 'undefined' && window.crypto 
+    ? `user_${window.crypto.getRandomValues(new Uint32Array(1))[0].toString(36)}`
+    : `user_${Date.now().toString(36)}`;
+  
+  const username = typeof window !== 'undefined' && window.crypto
+    ? `@user_${window.crypto.getRandomValues(new Uint32Array(1))[0].toString(36)}`
+    : `@user_${Date.now().toString(36)}`;
   
   const credentials: SocialMediaCredentials = {
     platform,
     accessToken: `simulated_token_${code}`,
     refreshToken: `simulated_refresh_${code}`,
     expiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour from now
-    userId: `user_${Math.random().toString(36).substring(7)}`,
-    username: `@user_${Math.random().toString(36).substring(7)}`,
+    userId,
+    username,
   };
   
   storeSocialCredentials(credentials);
   return credentials;
 };
 
-// Generate a random state for OAuth security
+// Generate a random state for OAuth security using cryptographically secure method
 const generateState = (): string => {
+  if (typeof window !== 'undefined' && window.crypto && window.crypto.getRandomValues) {
+    const array = new Uint32Array(2);
+    window.crypto.getRandomValues(array);
+    return array[0].toString(36) + array[1].toString(36);
+  }
+  // Fallback for environments without crypto API (should not be used in production)
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 };
 
