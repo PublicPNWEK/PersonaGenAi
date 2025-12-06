@@ -13,11 +13,14 @@ import { PrivacyModal } from './components/modals/PrivacyModal';
 import { TermsModal } from './components/modals/TermsModal';
 import { ContactModal } from './components/modals/ContactModal';
 import { UpgradeModal } from './components/modals/UpgradeModal';
+import { WorldClockApp } from './components/WorldClockApp';
 
 
 type AppState = 'INITIAL' | 'GENERATING' | 'REVIEWING' | 'CONNECTING' | 'POSTING' | 'RESULTS';
+type AppMode = 'persona' | 'worldclock';
 
 const App: React.FC = () => {
+  const [mode, setMode] = useState<AppMode>('worldclock');
   const [appState, setAppState] = useState<AppState>('INITIAL');
   const [userInput, setUserInput] = useState<UserInput | null>(null);
   const [suggestions, setSuggestions] = useState<ProfileSuggestions | null>(null);
@@ -115,8 +118,42 @@ const App: React.FC = () => {
     }
   };
 
+  // Render World Clock app if in worldclock mode
+  if (mode === 'worldclock') {
+    return (
+      <>
+        {/* Mode Switcher - Floating Button */}
+        <div className="fixed top-4 right-4 z-50">
+          <button
+            onClick={() => setMode('persona')}
+            className="bg-slate-800/90 backdrop-blur-sm text-white px-4 py-2 rounded-lg border border-slate-700 hover:border-sky-500 transition-all shadow-lg hover:shadow-sky-500/20 flex items-center gap-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            Persona App
+          </button>
+        </div>
+        <WorldClockApp />
+      </>
+    );
+  }
+
   return (
     <div className="bg-slate-900 text-white min-h-screen font-sans flex flex-col relative overflow-hidden">
+      {/* Mode Switcher - Floating Button */}
+      <div className="fixed top-4 right-4 z-50">
+        <button
+          onClick={() => setMode('worldclock')}
+          className="bg-slate-800/90 backdrop-blur-sm text-white px-4 py-2 rounded-lg border border-slate-700 hover:border-sky-500 transition-all shadow-lg hover:shadow-sky-500/20 flex items-center gap-2"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          World Clock
+        </button>
+      </div>
+
       {/* Decorative Background Gradients for "Liquid Glass" feel */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-sky-500/30 rounded-full filter blur-3xl opacity-20 animate-blob"></div>
       <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/30 rounded-full filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
