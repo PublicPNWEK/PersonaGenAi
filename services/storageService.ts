@@ -1,5 +1,9 @@
 
 // Fix: Provide implementation for a localStorage utility service.
+// SECURITY NOTE: localStorage stores data in clear text and is accessible to JavaScript
+// in the browser. Do NOT use this for storing highly sensitive data like real OAuth tokens
+// or passwords. In production, use secure, httpOnly cookies or server-side session storage
+// for sensitive credentials.
 export const storageService = {
   getItem: <T>(key: string): T | null => {
     try {

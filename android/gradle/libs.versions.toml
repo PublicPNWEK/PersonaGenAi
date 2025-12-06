@@ -1,0 +1,83 @@
+[versions]
+agp = "8.6.0"
+kotlin = "2.0.20"
+composeBom = "2024.09.01"
+coreKtx = "1.13.1"
+lifecycleRuntimeKtx = "2.8.4"
+activityCompose = "1.9.2"
+hilt = "2.52"
+work = "2.9.1"
+room = "2.6.1"
+retrofit = "2.11.0"
+okhttpLogging = "4.12.0"
+moshi = "1.15.1"
+coroutines = "1.9.0"
+billing = "7.1.1"
+ads = "23.3.0"
+datastore = "1.1.1"
+appauth = "0.11.1"
+securityCrypto = "1.1.0-alpha06"
+navigationCompose = "2.8.0"
+material3Adaptive = "1.3.0"
+playServicesAuth = "21.1.0"
+calendarApi = "v3-rev20240729-2.0.0"
+ossLicenses = "17.0.1"
+kotlinxSerialization = "1.7.3"
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version = "2.0.20-1.0.24" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-compose-material3-window = { group = "androidx.compose.material3", name = "material3-window-size-class" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version = "1.2.0" }
+androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work" }
+androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "securityCrypto" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
+androidx-compose-runtime-tracing = { group = "androidx.compose.runtime", name = "runtime-tracing", version = "1.0.0-beta01" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
+okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttpLogging" }
+moshi = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
+moshi-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
+coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+play-billing = { group = "com.android.billingclient", name = "billing-ktx", version.ref = "billing" }
+play-licensing = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "ossLicenses" }
+admob = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "ads" }
+play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
+appauth = { group = "net.openid", name = "appauth", version.ref = "appauth" }
+calendar-api = { group = "com.google.apis", name = "google-api-services-calendar", version.ref = "calendarApi" }
+play-services-base = { group = "com.google.android.gms", name = "play-services-base", version = "18.4.0" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+
+## Move test libraries into the supported top-level `libraries` section.
+## Gradle's version catalog TOML doesn't allow custom top-level tables such as
+## [test-libraries], so we add test dependencies here with distinct keys.
+
+# test dependencies
+junit = { group = "junit", name = "junit", version = "4.13.2" }
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version = "1.2.1" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version = "3.6.1" }
+androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+# `androidx-compose-ui-tooling` is already defined for non-test usage; add a test
+# specific key to avoid a duplicate key in the toml.
+androidx-compose-ui-tooling-test = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
