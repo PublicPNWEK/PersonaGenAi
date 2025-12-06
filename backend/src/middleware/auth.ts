@@ -52,6 +52,6 @@ export const generateToken = (userId: string, expiresIn: string = '7d'): string 
     throw new Error('JWT_SECRET is not configured');
   }
 
-  // Note: Type assertion needed due to TypeScript strict typing with jwt library
-  return jwt.sign({ userId }, jwtSecret, { expiresIn } as jwt.SignOptions);
+  // Generate the JWT token with the specified expiration
+  return jwt.sign({ userId }, jwtSecret, { expiresIn });
 };
