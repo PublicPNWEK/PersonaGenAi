@@ -2,6 +2,7 @@
 import { SocialMediaCredentials } from '../types/backend';
 import { storageService } from './storageService';
 import { backendConfig } from './backendConfig';
+import { isInstagramConfig, isTwitterConfig, isTikTokConfig } from './typeGuards';
 
 const CREDENTIALS_STORAGE_KEY = 'personagen_social_credentials';
 
@@ -62,16 +63,25 @@ export const initiateOAuth = async (platform: 'instagram' | 'twitter' | 'tiktok'
   switch (platform) {
     case 'instagram':
       // Instagram Basic Display API OAuth URL
+      if (!isInstagramConfig(config)) {
+        throw new Error('Invalid Instagram configuration');
+      }
       authUrl = `https://api.instagram.com/oauth/authorize?client_id=${config.clientId}&redirect_uri=${config.redirectUri}&scope=user_profile,user_media&response_type=code`;
       break;
       
     case 'twitter':
       // Twitter OAuth 2.0 URL (requires PKCE in production)
+      if (!isTwitterConfig(config)) {
+        throw new Error('Invalid Twitter configuration');
+      }
       authUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${config.apiKey}&redirect_uri=${window.location.origin}/auth/twitter/callback&scope=tweet.read%20tweet.write%20users.read&state=${generateState()}`;
       break;
       
     case 'tiktok':
       // TikTok OAuth URL
+      if (!isTikTokConfig(config)) {
+        throw new Error('Invalid TikTok configuration');
+      }
       authUrl = `https://www.tiktok.com/auth/authorize/?client_key=${config.clientKey}&response_type=code&scope=user.info.basic,video.list&redirect_uri=${window.location.origin}/auth/tiktok/callback&state=${generateState()}`;
       break;
       

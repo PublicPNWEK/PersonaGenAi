@@ -1,5 +1,6 @@
 // Backend configuration service for multi-platform integration
 import { BackendConfig, ApiTier } from '../types/backend';
+import { isInstagramConfig, isTwitterConfig, isTikTokConfig } from './typeGuards';
 
 // Default backend configuration
 // In production, these values should be loaded from environment variables
@@ -89,11 +90,11 @@ export const validateApiCredentials = (platform: 'instagram' | 'twitter' | 'tikt
   
   switch (platform) {
     case 'instagram':
-      return !!(config.clientId && config.clientSecret);
+      return isInstagramConfig(config) && !!(config.clientId && config.clientSecret);
     case 'twitter':
-      return !!(config.apiKey && config.apiSecret);
+      return isTwitterConfig(config) && !!(config.apiKey && config.apiSecret);
     case 'tiktok':
-      return !!(config.clientKey && config.clientSecret);
+      return isTikTokConfig(config) && !!(config.clientKey && config.clientSecret);
     default:
       return false;
   }
